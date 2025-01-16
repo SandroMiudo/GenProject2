@@ -19,8 +19,8 @@ class BrainDataset(Dataset):
             for m in map_type:
                 self.files[(brain, section, region, m)] = get_brain_section(brain, section, region, m)
         self.stats = {}
-        for m in map_type:
-            self.stats[m] = json.load(open(os.path.join(get_dataset_path(), m, 'stats.json')))
+        """for m in map_type:
+            self.stats[m] = json.load(open(os.path.join(get_dataset_path(), m, 'stats.json')))"""
         self.resolution = resolution
 
     def __getitem__(self, index):
@@ -31,7 +31,8 @@ class BrainDataset(Dataset):
         for m in map_type:
             brain_image = self.files[(brain, section, region, m)]["pyramid"][self.resolution][row:row+patch_size, column:column+patch_size]
             brain_image = torch.tensor(brain_image, dtype=torch.float32)
-            brain_image = (brain_image - torch.tensor(self.stats[m]["mean"])) / torch.tensor(self.stats[m]["std"])
+            brain_image = brain_image / 255.0
+            """(brain_image - torch.tensor(self.stats[m]["mean"])) / torch.tensor(self.stats[m]["std"])"""
             if brain_image.ndim == 2:
                 brain_image = brain_image.unsqueeze(2)
             output.append(brain_image.permute(2, 0, 1))

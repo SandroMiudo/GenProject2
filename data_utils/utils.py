@@ -7,10 +7,10 @@ import torch
 import h5py
 from IPython.core.pylabtools import figsize
 
-
+# this is not so practical!
 def get_dataset_path():
-    if os.path.exists('/home/sven/Documents/Uni/Gen/project2/data'):
-        return '/home/sven/Documents/Uni/Gen/project2/data'
+    if os.path.exists(os.path.abspath("../data")):
+        return os.path.abspath("../data")
     else:
         raise FileNotFoundError('Please add your dataset path to utils.py')
 
@@ -48,9 +48,9 @@ def visualize_batch(batch, map_type, normalized=True):
 
 
 def unnormalize(batch, map_type):
-    stats = json.load(open(os.path.join(get_dataset_path(), map_type, 'stats.json')))
-    mean, std = np.array(stats["mean"]), np.array(stats["std"])
-    batch = batch * std + mean
+    #stats = json.load(open(os.path.join(get_dataset_path(), map_type, 'stats.json')))
+    #mean, std = np.array(stats["mean"]), np.array(stats["std"])
+    batch = batch * 255.0 #std + mean
     batch = batch.clone().detach().cpu().numpy()
     batch = np.clip(batch, 0, 255).astype(np.uint8)
     return batch

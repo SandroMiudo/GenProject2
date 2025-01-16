@@ -1,2 +1,3 @@
-from .gan import GAN
-from .discriminator import Discriminator
+from .generator import Generator
+from .critic import Critic
+from . import base
